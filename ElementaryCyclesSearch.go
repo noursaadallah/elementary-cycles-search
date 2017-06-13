@@ -58,7 +58,7 @@ type ElementaryCyclesSearch struct {
 	 * build sets of the elementary cycles containing the objects of the original
 	 * graph-representation
 	 */
-	func ElementaryCyclesSearch(matrix [][]bool , graphNodes []interface{} ) *ElementaryCyclesSearch  {
+	func NewElementaryCyclesSearch(matrix [][]bool , graphNodes []interface{} ) *ElementaryCyclesSearch  {
 		ecs := new(ElementaryCyclesSearch)
 		ecs.graphNodes = graphNodes
 		ecs.adjList = GetAdjacencyList(matrix)

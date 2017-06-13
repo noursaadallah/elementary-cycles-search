@@ -1,5 +1,7 @@
 package graphs
 
+import "fmt"
+
 
 /**
  * Testfile for elementary cycle search.
@@ -7,16 +9,17 @@ package graphs
  * @author Frank Meyer
  *
  */
-public class TestCycles {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		String nodes[] = new String[10];
-		boolean adjMatrix[][] = new boolean[10][10];
+	func main() {
+		//String nodes[] = new String[10];
+		nodes := make([]string , 10)
+		//boolean adjMatrix[][] = new boolean[10][10];
+		adjMatrix := [][]bool{}
 
-		for (int i = 0; i < 10; i++) {
+		for i := 0; i < 10; i++ {
 			nodes[i] = "Node " + i;
 		}
 
@@ -44,21 +47,20 @@ public class TestCycles {
         adjMatrix[8][6] = true;
         
         adjMatrix[6][1] = true;
-
-		ElementaryCyclesSearch ecs = new ElementaryCyclesSearch(adjMatrix, nodes);
-		List cycles = ecs.getElementaryCycles();
-		for (int i = 0; i < cycles.size(); i++) {
-			List cycle = (List) cycles.get(i);
-			for (int j = 0; j < cycle.size(); j++) {
-				String node = (String) cycle.get(j);
-				if (j < cycle.size() - 1) {
-					System.out.print(node + " -> ");
+var ecs ElementaryCyclesSearch
+		ecs = NewElementaryCyclesSearch(adjMatrix, nodes);
+		cycles := ecs.getElementaryCycles();
+		for i := 0; i < len(cycles); i++ {
+			cycle := cycles[i]
+			for j := 0; j < len(cycle); j++ {
+				var node string
+				node = string(cycle[j])
+				if (j < len(cycle) - 1) {
+					fmt.Print(node + " -> ");
 				} else {
-					System.out.print(node);
+					fmt.Print(node);
 				}
 			}
-			System.out.print("\n");
+			fmt.Print("\n");
 		}
 	}
-
-}
