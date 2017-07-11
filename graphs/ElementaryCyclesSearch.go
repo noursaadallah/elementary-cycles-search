@@ -26,15 +26,15 @@ package graphs
  */
 type ElementaryCyclesSearch struct {
 	/** List of cycles */
-	// private List cycles = null // TODO : look into how to reproduce same behavior
+	// private List<List<Integer>> cycles = null // TODO : look into how to reproduce same behavior
 	cycles [][]int
 
 	/** Adjacency-list of graph */
 	adjList [][]int
 
 	/** Graphnodes */
-	//private Object[] graphNodes = null;
-	graphNodes []int //[]interface{}
+	//private Integer[] graphNodes = null;
+	graphNodes []int
 
 	/** Blocked nodes, used by the algorithm of Johnson */
 	blocked []bool
@@ -70,16 +70,17 @@ func NewElementaryCyclesSearch(matrix [][]bool, graphNodes []int) *ElementaryCyc
  * @return List::List::Object with the Lists of the elementary cycles.
  */
 func (this *ElementaryCyclesSearch) GetElementaryCycles() [][]int {
-	this.cycles = *new([][]int)
+	this.cycles = make([][]int, 0)
 	this.blocked = make([]bool, len(this.adjList))
 	this.B = make([][]int, len(this.adjList))
-	this.stack = *new([]int)
-	var sccs StrongConnectedComponents
-	sccs = *NewStrongConnectedComponents(this.adjList)
+	this.stack = make([]int, 0)
+	var sccs *StrongConnectedComponents
+	sccs = NewStrongConnectedComponents(this.adjList)
 	s := 0
 
 	for true {
-		sccResult := sccs.getAdjacencyList(s)
+		var sccResult *SCCResult
+		sccResult = sccs.getAdjacencyList(s)
 		if sccResult != nil && sccResult.getAdjList() != nil {
 			var scc [][]int
 			scc = sccResult.getAdjList()
@@ -87,7 +88,7 @@ func (this *ElementaryCyclesSearch) GetElementaryCycles() [][]int {
 			for j := 0; j < len(scc); j++ {
 				if (scc[j] != nil) && (len(scc[j]) > 0) {
 					this.blocked[j] = false
-					//this.B[j] = new Vector();
+					this.B[j] = make([]int, 0)
 				}
 			}
 
@@ -113,7 +114,8 @@ func (this *ElementaryCyclesSearch) GetElementaryCycles() [][]int {
  */
 func (this *ElementaryCyclesSearch) findCycles(v int, s int, adjList [][]int) bool {
 	f := false
-	this.stack[len(this.stack)-1] = v
+	//this.stack[len(this.stack)-1] = v
+	this.stack = append(this.stack, v)
 	this.blocked[v] = true
 
 	for i := 0; i < len(adjList[v]); i++ {
@@ -121,6 +123,7 @@ func (this *ElementaryCyclesSearch) findCycles(v int, s int, adjList [][]int) bo
 		// found cycle
 		if w == s {
 			var cycle []int
+			cycle = make([]int, 0)
 			for j := 0; j < len(this.stack); j++ {
 				index := this.stack[j]
 				cycle = append(cycle, this.graphNodes[index])
@@ -145,7 +148,9 @@ func (this *ElementaryCyclesSearch) findCycles(v int, s int, adjList [][]int) bo
 		}
 	}
 
-	this.stack = append(this.stack[:v], this.stack[v+1:]...)
+	//fmt.Println(len(this.stack)) // = 6
+	//fmt.Println(v) // =8
+	this.stack = append(this.stack[:v], this.stack[v+1:]...) //this.stack.remove(v) : v is the index to remove
 	return f
 }
 
@@ -177,7 +182,7 @@ func (this *ElementaryCyclesSearch) unblock(node int) {
 	Bnode := this.B[node]
 	for len(Bnode) > 0 {
 		w := Bnode[0]
-		Bnode = append(Bnode[:0], Bnode[0+1:]...)
+		Bnode = append(Bnode[:0], Bnode[0+1:]...) // remove first element - TODO : check if element are shifted correctly (i.e index 1 becomes 0 etc.)
 		if this.blocked[w] {
 			this.unblock(w)
 		}

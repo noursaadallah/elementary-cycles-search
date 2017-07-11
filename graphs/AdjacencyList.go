@@ -16,17 +16,20 @@ package graphs
  * @return int[][]-array of the adjacency-list of given nodes. The first
  * dimension in the array represents the same node as in the given
  * adjacency, the second dimension represents the indicies of those nodes,
- * that are direct successornodes of the node.
+ * that are direct successor nodes of the node.
  */
+
+// GetAdjacencyList : static method
 func GetAdjacencyList(adjacencyMatrix [][]bool) [][]int {
 	var list [][]int
 	list = make([][]int, len(adjacencyMatrix))
 
 	for i := 0; i < len(adjacencyMatrix); i++ {
 		var v []int
+		v = make([]int, 0)
 		for j := 0; j < len(adjacencyMatrix[i]); j++ {
 			if adjacencyMatrix[i][j] {
-				v = append(v, j)
+				v = append(v, j) //v.add(j)
 			}
 		}
 

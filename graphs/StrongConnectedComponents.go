@@ -1,6 +1,9 @@
 package graphs
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 /**
  * This is a helpclass for the search of all elementary cycles in a graph
@@ -29,35 +32,27 @@ import "math"
  */
 type StrongConnectedComponents struct {
 	/** Adjacency-list of original graph */
-	//private int[][] adjListOriginal = null;
 	adjListOriginal [][]int
 
 	/** Adjacency-list of currently viewed subgraph */
-	//private int[][] adjList = null;
 	adjList [][]int
 
 	/** Helpattribute for finding scc's */
-	//private boolean[] visited = null;
 	visited []bool
 
 	/** Helpattribute for finding scc's */
-	//private Vector stack = null;
 	stack []int
 
 	/** Helpattribute for finding scc's */
-	//private int[] lowlink = null;
 	lowlink []int
 
 	/** Helpattribute for finding scc's */
-	//private int[] number = null;
 	number []int
 
 	/** Helpattribute for finding scc's */
-	//private int sccCounter = 0;
 	sccCounter int
 
 	/** Helpattribute for finding scc's */
-	//private Vector currentSCCs = null;
 	currentSCCs [][]int
 }
 
@@ -69,6 +64,7 @@ type StrongConnectedComponents struct {
 func NewStrongConnectedComponents(adjList [][]int) *StrongConnectedComponents {
 	this := new(StrongConnectedComponents)
 	this.adjListOriginal = adjList
+	this.sccCounter = 0 // just to check
 	return this
 }
 
@@ -93,7 +89,9 @@ func (this *StrongConnectedComponents) getAdjacencyList(node int) *SCCResult {
 	//this.visited = new boolean[this.adjListOriginal.length];
 	this.visited = make([]bool, len(this.adjListOriginal))
 	//this.stack = new Vector();
+	this.stack = make([]int, 0)
 	//this.currentSCCs = new Vector();
+	this.currentSCCs = make([][]int, 0)
 
 	this.makeAdjListSubgraph(node)
 
@@ -130,9 +128,13 @@ func (this *StrongConnectedComponents) getAdjacencyList(node int) *SCCResult {
  */
 func (this *StrongConnectedComponents) makeAdjListSubgraph(node int) {
 	this.adjList = make([][]int, len(this.adjListOriginal)) // = new int[this.adjListOriginal.length][0];
+	for i := range this.adjList {
+		this.adjList[i] = make([]int, 0)
+	}
 
 	for i := node; i < len(this.adjList); i++ {
 		var successors []int
+		successors = make([]int, 0)
 		for j := 0; j < len(this.adjListOriginal[i]); j++ {
 			if this.adjListOriginal[i][j] >= node {
 				successors = append(successors, this.adjListOriginal[i][j])
@@ -158,6 +160,7 @@ func (this *StrongConnectedComponents) makeAdjListSubgraph(node int) {
 func (this *StrongConnectedComponents) getLowestIdComponent() []int {
 	min := len(this.adjList)
 	var currScc []int
+	currScc = nil
 
 	for i := 0; i < len(this.currentSCCs); i++ {
 		var scc []int
@@ -183,13 +186,14 @@ func (this *StrongConnectedComponents) getLowestIdComponent() []int {
 func (this *StrongConnectedComponents) getAdjList(nodes []int) [][]int {
 	//Vector[] lowestIdAdjacencyList = null;
 	var lowestIdAdjacencyList [][]int
+	lowestIdAdjacencyList = nil
 
 	if nodes != nil {
 		//lowestIdAdjacencyList = new Vector[this.adjList.length];
 		lowestIdAdjacencyList = make([][]int, len(this.adjList))
-		//for i := 0; i < len(lowestIdAdjacencyList); i++ {
-		//lowestIdAdjacencyList[i] = new Vector();
-		//}
+		for i := 0; i < len(lowestIdAdjacencyList); i++ {
+			lowestIdAdjacencyList[i] = make([]int, 0)
+		}
 		for i := 0; i < len(nodes); i++ {
 			//int node = ((Integer) nodes.get(i)).intValue();
 			node := nodes[i]
@@ -206,7 +210,7 @@ func (this *StrongConnectedComponents) getAdjList(nodes []int) [][]int {
 }
 
 /**
- * Searchs for strong connected components reachable from a given node.
+ * Searches for strong connected components reachable from a given node.
  *
  * @param root node to start from.
  */
@@ -236,6 +240,7 @@ func (this *StrongConnectedComponents) getStrongConnectedComponents(root int) {
 		next := -1
 		//Vector scc = new Vector();
 		var scc []int
+		scc = make([]int, 0)
 
 		//do {
 		//	next = ((Integer) this.stack.get(stack.size() - 1)).intValue();
@@ -245,6 +250,8 @@ func (this *StrongConnectedComponents) getStrongConnectedComponents(root int) {
 
 		for ok := true; ok; ok = (this.number[next] > this.number[root]) {
 			next = this.stack[len(this.stack)-1]
+			this.stack = this.stack[:len(this.stack)-1]
+			scc = append(scc, next)
 		}
 
 		// simple scc's with just one node will not be added
@@ -254,56 +261,67 @@ func (this *StrongConnectedComponents) getStrongConnectedComponents(root int) {
 	}
 }
 
-//	public static void main(String[] args) {
-//		boolean[][] adjMatrix = new boolean[10][];
-//
-//		for (int i = 0; i < 10; i++) {
-//			adjMatrix[i] = new boolean[10];
-//		}
-//
-//		/*adjMatrix[0][1] = true;
-//		adjMatrix[1][2] = true;
-//		adjMatrix[2][0] = true;
-//		adjMatrix[2][4] = true;
-//		adjMatrix[1][3] = true;
-//		adjMatrix[3][6] = true;
-//		adjMatrix[6][5] = true;
-//		adjMatrix[5][3] = true;
-//		adjMatrix[6][7] = true;
-//		adjMatrix[7][8] = true;
-//		adjMatrix[7][9] = true;
-//		adjMatrix[9][6] = true;*/
-//
-//        adjMatrix[0][1] = true;
-//        adjMatrix[1][2] = true;
-//        adjMatrix[2][0] = true; adjMatrix[2][6] = true;
-//        adjMatrix[3][4] = true;
-//        adjMatrix[4][5] = true; adjMatrix[4][6] = true;
-//        adjMatrix[5][3] = true;
-//        adjMatrix[6][7] = true;
-//        adjMatrix[7][8] = true;
-//        adjMatrix[8][6] = true;
-//
-//        adjMatrix[6][1] = true;
-//
-//		int[][] adjList = AdjacencyList.getAdjacencyList(adjMatrix);
-//		StrongConnectedComponents scc = new StrongConnectedComponents(adjList);
-//		for (int i = 0; i < adjList.length; i++) {
-//			System.out.print("i: " + i + "\n");
-//			SCCResult r = scc.getAdjacencyList(i);
-//			if (r != null) {
-//				Vector[] al = scc.getAdjacencyList(i).getAdjList();
-//				for (int j = i; j < al.length; j++) {
-//					if (al[j].size() > 0) {
-//						System.out.print("j: " + j);
-//						for (int k = 0; k < al[j].size(); k++) {
-//							System.out.print(" _" + al[j].get(k).toString());
-//						}
-//						System.out.print("\n");
-//					}
-//				}
-//				System.out.print("\n");
-//			}
-//		}
-//	}
-//}
+func main() {
+	//boolean[][] adjMatrix = new boolean[10][];
+	adjMatrix := make([][]bool, 10)
+
+	for i := 0; i < 10; i++ {
+		//adjMatrix[i] = new boolean[10];
+		adjMatrix[i] = make([]bool, 10)
+	}
+
+	/*adjMatrix[0][1] = true;
+	adjMatrix[1][2] = true;
+	adjMatrix[2][0] = true;
+	adjMatrix[2][4] = true;
+	adjMatrix[1][3] = true;
+	adjMatrix[3][6] = true;
+	adjMatrix[6][5] = true;
+	adjMatrix[5][3] = true;
+	adjMatrix[6][7] = true;
+	adjMatrix[7][8] = true;
+	adjMatrix[7][9] = true;
+	adjMatrix[9][6] = true;*/
+
+	adjMatrix[0][1] = true
+	adjMatrix[1][2] = true
+	adjMatrix[2][0] = true
+	adjMatrix[2][6] = true
+	adjMatrix[3][4] = true
+	adjMatrix[4][5] = true
+	adjMatrix[4][6] = true
+	adjMatrix[5][3] = true
+	adjMatrix[6][7] = true
+	adjMatrix[7][8] = true
+	adjMatrix[8][6] = true
+
+	adjMatrix[6][1] = true
+
+	//int[][] adjList = AdjacencyList.getAdjacencyList(adjMatrix);
+	var adjList [][]int
+	adjList = GetAdjacencyList(adjMatrix)
+
+	//StrongConnectedComponents scc = new StrongConnectedComponents(adjList);
+	var scc *StrongConnectedComponents
+	scc = NewStrongConnectedComponents(adjList)
+
+	for i := 0; i < len(adjList); i++ {
+		fmt.Print("i: ", i, "\n")
+		var r *SCCResult
+		r = scc.getAdjacencyList(i)
+		if r != nil {
+			var al [][]int
+			al = scc.getAdjacencyList(i).getAdjList()
+			for j := i; j < len(al); j++ {
+				if len(al[j]) > 0 {
+					fmt.Print("j: ", j)
+					for k := 0; k < len(al[j]); k++ {
+						fmt.Print(" _", al[j][k])
+					}
+					fmt.Print("\n")
+				}
+			}
+			fmt.Print("\n")
+		}
+	}
+}
