@@ -1,4 +1,4 @@
-package graphs
+package cycles
 
 /**
  * Searchs all elementary cycles in a given directed graph. The implementation
