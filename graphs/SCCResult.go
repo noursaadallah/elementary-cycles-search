@@ -1,21 +1,18 @@
 package graphs
 
+// SCCResult : represents the adjacency structure of a set of Strongly Connected Components
 type SCCResult struct {
-	//private Set nodeIDsOfSCC = null; // Set is a list without duplicates || apparently works with ordinary list, but we should probably reproduce the behaviour of Set
-	nodeIDsOfSCC []int
-	//private Vector[] adjList = null;
-	adjList [][]int
-	//private int lowestNodeId = -1;
-	lowestNodeId int
+	nodeIDsOfSCC []int //private Set nodeIDsOfSCC = null; // Set is a list without duplicates || apparently works with ordinary list, but we should probably replicate the behaviour of Set
+	adjList      [][]int
+	lowestNodeId int //private int lowestNodeId = -1;
 }
 
-// Constructor
+// NewSCCResult : Constructor
 func NewSCCResult(adjList [][]int, lowestNodeId int) *SCCResult {
 	this := new(SCCResult)
 	this.adjList = adjList
 	this.lowestNodeId = lowestNodeId
-	//this.nodeIDsOfSCC = new HashSet();
-	this.nodeIDsOfSCC = make([]int, 0)
+	this.nodeIDsOfSCC = make([]int, 0) //this.nodeIDsOfSCC = new HashSet(); // TODO : replicate behaviour of Set
 	if this.adjList != nil {
 		for i := this.lowestNodeId; i < len(this.adjList); i++ {
 			if len(this.adjList[i]) > 0 {

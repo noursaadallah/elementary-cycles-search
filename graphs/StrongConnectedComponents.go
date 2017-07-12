@@ -15,21 +15,24 @@ import (
  * graph (e.g. it builds a subgraph with all nodes with higher or same
  * nodenumbers like the given node s). It returns the strong connected
  * component of this subgraph which contains the lowest nodenumber of all
- * nodes in the subgraph.<br><br>
+ * nodes in the subgraph.
  *
  * For a description of the algorithm for calculating the strong connected
- * components see:<br>
+ * components see:
  * Robert Tarjan: Depth-first search and linear graph algorithms. In: SIAM
- * Journal on Computing. Volume 1, Nr. 2 (1972), pp. 146-160.<br>
+ * Journal on Computing. Volume 1, Nr. 2 (1972), pp. 146-160.
  * For a description of the algorithm for searching all elementary cycles in
- * a directed graph see:<br>
+ * a directed graph see:
  * Donald B. Johnson: Finding All the Elementary Circuits of a Directed Graph.
- * SIAM Journal on Computing. Volumne 4, Nr. 1 (1975), pp. 77-84.<br><br>
+ * SIAM Journal on Computing. Volumne 4, Nr. 1 (1975), pp. 77-84.
  *
+ * This is based on the Java implementation of :
  * @author Frank Meyer, web_at_normalisiert_dot_de
  * @version 1.1, 22.03.2009
  *
  */
+
+// StrongConnectedComponents : represent a set of scc's
 type StrongConnectedComponents struct {
 	/** Adjacency-list of original graph */
 	adjListOriginal [][]int
@@ -56,6 +59,7 @@ type StrongConnectedComponents struct {
 	currentSCCs [][]int
 }
 
+// NewStrongConnectedComponents :
 /**
  * Constructor.
  *
@@ -64,10 +68,10 @@ type StrongConnectedComponents struct {
 func NewStrongConnectedComponents(adjList [][]int) *StrongConnectedComponents {
 	this := new(StrongConnectedComponents)
 	this.adjListOriginal = adjList
-	this.sccCounter = 0 // just to check
 	return this
 }
 
+// getAdjacencyList :
 /**
  * This method returns the adjacency-structure of the strong connected
  * component with the least vertex in a subgraph of the original graph
@@ -80,17 +84,12 @@ func NewStrongConnectedComponents(adjList [][]int) *StrongConnectedComponents {
  * connected component; null, if no such component exists
  */
 func (this *StrongConnectedComponents) getAdjacencyList(node int) *SCCResult {
-	//this.visited = new boolean[this.adjListOriginal.length];
+
 	this.visited = make([]bool, len(this.adjListOriginal))
-	//this.lowlink = new int[this.adjListOriginal.length];
 	this.lowlink = make([]int, len(this.adjListOriginal))
-	//this.number = new int[this.adjListOriginal.length];
 	this.number = make([]int, len(this.adjListOriginal))
-	//this.visited = new boolean[this.adjListOriginal.length];
 	this.visited = make([]bool, len(this.adjListOriginal))
-	//this.stack = new Vector();
 	this.stack = make([]int, 0)
-	//this.currentSCCs = new Vector();
 	this.currentSCCs = make([][]int, 0)
 
 	this.makeAdjListSubgraph(node)
@@ -120,6 +119,7 @@ func (this *StrongConnectedComponents) getAdjacencyList(node int) *SCCResult {
 	return nil
 }
 
+// makeAdjListSubgraph :
 /**
  * Builds the adjacency-list for a subgraph containing just nodes
  * >= a given index.
@@ -151,6 +151,7 @@ func (this *StrongConnectedComponents) makeAdjListSubgraph(node int) {
 	}
 }
 
+// getLowestIdComponent :
 /**
  * Calculates the strong connected component out of a set of scc's, that
  * contains the node with the lowest index.
@@ -178,6 +179,7 @@ func (this *StrongConnectedComponents) getLowestIdComponent() []int {
 	return currScc
 }
 
+// getAdjList
 /**
  * @return Vector[]::Integer representing the adjacency-structure of the
  * strong connected component with least vertex in the currently viewed
@@ -189,13 +191,11 @@ func (this *StrongConnectedComponents) getAdjList(nodes []int) [][]int {
 	lowestIdAdjacencyList = nil
 
 	if nodes != nil {
-		//lowestIdAdjacencyList = new Vector[this.adjList.length];
 		lowestIdAdjacencyList = make([][]int, len(this.adjList))
 		for i := 0; i < len(lowestIdAdjacencyList); i++ {
 			lowestIdAdjacencyList[i] = make([]int, 0)
 		}
 		for i := 0; i < len(nodes); i++ {
-			//int node = ((Integer) nodes.get(i)).intValue();
 			node := nodes[i]
 			for j := 0; j < len(this.adjList[node]); j++ {
 				succ := this.adjList[node][j]
@@ -209,6 +209,7 @@ func (this *StrongConnectedComponents) getAdjList(nodes []int) [][]int {
 	return lowestIdAdjacencyList
 }
 
+// getStrongConnectedComponents :
 /**
  * Searches for strong connected components reachable from a given node.
  *
@@ -225,11 +226,9 @@ func (this *StrongConnectedComponents) getStrongConnectedComponents(root int) {
 		w := this.adjList[root][i]
 		if !this.visited[w] {
 			this.getStrongConnectedComponents(w)
-			//this.lowlink[root] = Math.min(lowlink[root], lowlink[w]);
 			this.lowlink[root] = int(math.Min(float64(this.lowlink[root]), float64(this.lowlink[w])))
 		} else if this.number[w] < this.number[root] {
 			if contains(this.stack, w) {
-				//lowlink[root] = Math.min(this.lowlink[root], this.number[w]);
 				this.lowlink[root] = int(math.Min(float64(this.lowlink[root]), float64(this.number[w])))
 			}
 		}
@@ -238,16 +237,10 @@ func (this *StrongConnectedComponents) getStrongConnectedComponents(root int) {
 	// found scc
 	if (this.lowlink[root] == this.number[root]) && (len(this.stack) > 0) {
 		next := -1
-		//Vector scc = new Vector();
 		var scc []int
 		scc = make([]int, 0)
 
-		//do {
-		//	next = ((Integer) this.stack.get(stack.size() - 1)).intValue();
-		//	this.stack.remove(stack.size() - 1);
-		//	scc.add(new Integer(next));
-		//} while (this.number[next] > this.number[root]);
-
+		// do while equivalent
 		for ok := true; ok; ok = (this.number[next] > this.number[root]) {
 			next = this.stack[len(this.stack)-1]
 			this.stack = this.stack[:len(this.stack)-1]
@@ -262,11 +255,9 @@ func (this *StrongConnectedComponents) getStrongConnectedComponents(root int) {
 }
 
 func main() {
-	//boolean[][] adjMatrix = new boolean[10][];
 	adjMatrix := make([][]bool, 10)
 
 	for i := 0; i < 10; i++ {
-		//adjMatrix[i] = new boolean[10];
 		adjMatrix[i] = make([]bool, 10)
 	}
 
@@ -297,11 +288,9 @@ func main() {
 
 	adjMatrix[6][1] = true
 
-	//int[][] adjList = AdjacencyList.getAdjacencyList(adjMatrix);
 	var adjList [][]int
 	adjList = GetAdjacencyList(adjMatrix)
 
-	//StrongConnectedComponents scc = new StrongConnectedComponents(adjList);
 	var scc *StrongConnectedComponents
 	scc = NewStrongConnectedComponents(adjList)
 

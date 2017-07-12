@@ -8,49 +8,45 @@ package graphs
  * graph. It then calculates based on the adjacency-matrix the elementary
  * cycles and returns a list, which contains lists itself with the objects of the
  * concrete graphnodes-implementation. Each of these lists represents an
- * elementary cycle.<br><br>
+ * elementary cycle.
  *
  * The implementation uses the algorithm of Donald B. Johnson for the search of
- * the elementary cycles. For a description of the algorithm see:<br>
+ * the elementary cycles. For a description of the algorithm see:
  * Donald B. Johnson: Finding All the Elementary Circuits of a Directed Graph.
- * SIAM Journal on Computing. Volumne 4, Nr. 1 (1975), pp. 77-84.<br><br>
+ * SIAM Journal on Computing. Volumne 4, Nr. 1 (1975), pp. 77-84.
  *
  * The algorithm of Johnson is based on the search for strong connected
- * components in a graph. For a description of this part see:<br>
+ * components in a graph. For a description of this part see:
  * Robert Tarjan: Depth-first search and linear graph algorithms. In: SIAM
- * Journal on Computing. Volume 1, Nr. 2 (1972), pp. 146-160.<br>
+ * Journal on Computing. Volume 1, Nr. 2 (1972), pp. 146-160.
  *
+ * This is based on the Java implementation of :
  * @author Frank Meyer, web_at_normalisiert_dot_de
  * @version 1.2, 22.03.2009
  *
  */
 type ElementaryCyclesSearch struct {
 	/** List of cycles */
-	// private List<List<Integer>> cycles = null // TODO : look into how to reproduce same behavior
 	cycles [][]int
 
 	/** Adjacency-list of graph */
 	adjList [][]int
 
 	/** Graphnodes */
-	//private Integer[] graphNodes = null;
 	graphNodes []int
 
 	/** Blocked nodes, used by the algorithm of Johnson */
 	blocked []bool
 
 	/** B-Lists, used by the algorithm of Johnson */
-	//private Vector[] B = null;
 	B [][]int
 
 	/** Stack for nodes, used by the algorithm of Johnson */
-	//private Vector stack = null;
 	stack []int
 }
 
+// NewElementaryCyclesSearch : Constructor
 /**
- * Constructor.
- *
  * @param matrix adjacency-matrix of the graph
  * @param graphNodes array of the graphnodes of the graph; this is used to
  * build sets of the elementary cycles containing the objects of the original
@@ -63,6 +59,7 @@ func NewElementaryCyclesSearch(matrix [][]bool, graphNodes []int) *ElementaryCyc
 	return ecs
 }
 
+// GetElementaryCycles :
 /**
  * Returns List::List::Object with the Lists of nodes of all elementary
  * cycles in the graph.
@@ -102,6 +99,7 @@ func (this *ElementaryCyclesSearch) GetElementaryCycles() [][]int {
 	return this.cycles
 }
 
+// findCycles :
 /**
  * Calculates the cycles containing a given node in a strongly connected
  * component. The method calls itself recursivly.
@@ -148,14 +146,12 @@ func (this *ElementaryCyclesSearch) findCycles(v int, s int, adjList [][]int) bo
 		}
 	}
 
-	//fmt.Println(len(this.stack)) // = 6
-	//fmt.Println(v) // = 8
-	//this.stack = append(this.stack[:v], this.stack[v+1:]...) //this.stack.remove(v) : v is the object to remove
-	this.stack = remove(this.stack, v)
+	this.stack = remove(this.stack, v) //this.stack.remove(v) : v is the object to remove
 
 	return f
 }
 
+// remove : remove an element from a slice
 func remove(s []int, r int) []int {
 	for i, v := range s {
 		if v == r {
@@ -165,6 +161,7 @@ func remove(s []int, r int) []int {
 	return s
 }
 
+// contains : returns true if slice contains element, else false
 func contains(s []int, e int) bool {
 	for _, a := range s {
 		if a == e {
@@ -174,6 +171,7 @@ func contains(s []int, e int) bool {
 	return false
 }
 
+// unblock :
 /**
  * Unblocks recursivly all blocked nodes, starting with a given node.
  *

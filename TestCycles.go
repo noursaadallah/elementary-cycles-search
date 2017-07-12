@@ -11,6 +11,7 @@ import (
 /**
  * Testfile for elementary cycle search.
  *
+ * Based on work of :
  * @author Frank Meyer
  *
  */
@@ -19,17 +20,15 @@ import (
  * @param args
  */
 func main() {
-	//String nodes[] = new String[10];
-	//nodes := make([]string, 10)
-	nodes := make([]int, 10)
-	//boolean adjMatrix[][] = new boolean[10][10];
-	adjMatrix := make([][]bool, 10)
 
+	// init 2D array
+	adjMatrix := make([][]bool, 10)
 	for i := 0; i < 10; i++ {
-		//nodes[i] = "Node " + strconv.Itoa(i)
 		adjMatrix[i] = make([]bool, 10)
 	}
 
+	// init nodes
+	nodes := make([]int, 10) //nodes := make([]string, 10)
 	for i := 0; i < 10; i++ {
 		//nodes[i] = "Node " + strconv.Itoa(i)
 		nodes[i] = i
