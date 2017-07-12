@@ -149,19 +149,21 @@ func (this *ElementaryCyclesSearch) findCycles(v int, s int, adjList [][]int) bo
 	}
 
 	//fmt.Println(len(this.stack)) // = 6
-	//fmt.Println(v) // =8
-	this.stack = append(this.stack[:v], this.stack[v+1:]...) //this.stack.remove(v) : v is the index to remove
+	//fmt.Println(v) // = 8
+	//this.stack = append(this.stack[:v], this.stack[v+1:]...) //this.stack.remove(v) : v is the object to remove
+	this.stack = remove(this.stack, v)
+
 	return f
 }
 
-//func remove(s []int, r int) []int {
-//	for i, v := range s {
-//		if v == r {
-//			return append(s[:i], s[i+1:]...)
-//		}
-//	}
-//	return s
-//}
+func remove(s []int, r int) []int {
+	for i, v := range s {
+		if v == r {
+			return append(s[:i], s[i+1:]...)
+		}
+	}
+	return s
+}
 
 func contains(s []int, e int) bool {
 	for _, a := range s {

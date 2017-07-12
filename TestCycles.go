@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"strconv"
+
 	"github.com/noursaadallah/elementary-cycles-golang/graphs"
 )
 
@@ -67,7 +69,7 @@ func main() {
 		cycle := cycles[i]
 		for j := 0; j < len(cycle); j++ {
 			var node string
-			node = string(cycle[j])
+			node = strconv.Itoa(cycle[j])
 			if j < len(cycle)-1 {
 				fmt.Print(node + " -> ")
 			} else {
