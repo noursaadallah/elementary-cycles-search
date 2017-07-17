@@ -1,4 +1,4 @@
-package cycles
+package ElementaryCyclesSearch
 
 /**
  * Calculates the adjacency-list for a given adjacency-matrix.

@@ -1,4 +1,4 @@
-package cycles
+package ElementaryCyclesSearch
 
 // SCCResult : represents the adjacency structure of a set of Strongly Connected Components
 type SCCResult struct {

@@ -1,4 +1,4 @@
-package cycles
+package ElementaryCyclesSearch
 
 import (
 	"fmt"
