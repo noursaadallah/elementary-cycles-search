@@ -14,9 +14,8 @@ func TestCycles1(t *testing.T) {
 	}
 
 	// init nodes
-	nodes := make([]int, 10) //nodes := make([]string, 10)
+	nodes := make([]int, 10)
 	for i := 0; i < 10; i++ {
-		//nodes[i] = "Node " + strconv.Itoa(i)
 		nodes[i] = i
 	}
 
@@ -65,9 +64,8 @@ func TestCycles2(t *testing.T) {
 	}
 
 	// init nodes
-	nodes := make([]int, 10) //nodes := make([]string, 10)
+	nodes := make([]int, 10)
 	for i := 0; i < 10; i++ {
-		//nodes[i] = "Node " + strconv.Itoa(i)
 		nodes[i] = i
 	}
 
@@ -116,9 +114,8 @@ func TestCycles3(t *testing.T) {
 	}
 
 	// init nodes
-	nodes := make([]int, 10) //nodes := make([]string, 10)
+	nodes := make([]int, 10)
 	for i := 0; i < 10; i++ {
-		//nodes[i] = "Node " + strconv.Itoa(i)
 		nodes[i] = i
 	}
 
@@ -148,9 +145,8 @@ func TestCycles4(t *testing.T) {
 	}
 
 	// init nodes
-	nodes := make([]int, 10) //nodes := make([]string, 10)
+	nodes := make([]int, 10)
 	for i := 0; i < 10; i++ {
-		//nodes[i] = "Node " + strconv.Itoa(i)
 		nodes[i] = i
 	}
 

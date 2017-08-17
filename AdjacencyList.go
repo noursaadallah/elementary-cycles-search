@@ -10,7 +10,6 @@ package ElementaryCyclesSearch
  *
  */
 
-// GetAdjacencyList : static method
 /**
  * Calculates an adjacency-list for a given array of an adjacency-matrix.
  *
@@ -30,7 +29,7 @@ func GetAdjacencyList(adjacencyMatrix [][]bool) [][]int {
 		v = make([]int, 0)
 		for j := 0; j < len(adjacencyMatrix[i]); j++ {
 			if adjacencyMatrix[i][j] {
-				v = append(v, j) //v.add(j)
+				v = append(v, j)
 			}
 		}
 

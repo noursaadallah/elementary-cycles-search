@@ -32,7 +32,7 @@ import (
  *
  */
 
-// StrongConnectedComponents : represent a set of scc's
+// StrongConnectedComponents : represents a set of scc's
 type StrongConnectedComponents struct {
 	/** Adjacency-list of original graph */
 	adjListOriginal [][]int
@@ -59,7 +59,6 @@ type StrongConnectedComponents struct {
 	currentSCCs [][]int
 }
 
-// NewStrongConnectedComponents :
 /**
  * Constructor.
  *
@@ -71,10 +70,9 @@ func NewStrongConnectedComponents(adjList [][]int) *StrongConnectedComponents {
 	return this
 }
 
-// getAdjacencyList :
 /**
  * This method returns the adjacency-structure of the strong connected
- * component with the least vertex in a subgraph of the original graph
+ * components with the least vertex in a subgraph of the original graph
  * induced by the nodes {s, s + 1, ..., n}, where s is a given node. Note
  * that trivial strong connected components with just one node will not
  * be returned.
@@ -119,7 +117,6 @@ func (this *StrongConnectedComponents) getAdjacencyList(node int) *SCCResult {
 	return nil
 }
 
-// makeAdjListSubgraph :
 /**
  * Builds the adjacency-list for a subgraph containing just nodes
  * >= a given index.
@@ -127,7 +124,7 @@ func (this *StrongConnectedComponents) getAdjacencyList(node int) *SCCResult {
  * @param node Node with lowest index in the subgraph
  */
 func (this *StrongConnectedComponents) makeAdjListSubgraph(node int) {
-	this.adjList = make([][]int, len(this.adjListOriginal)) // = new int[this.adjListOriginal.length][0];
+	this.adjList = make([][]int, len(this.adjListOriginal))
 	for i := range this.adjList {
 		this.adjList[i] = make([]int, 0)
 	}
@@ -151,7 +148,6 @@ func (this *StrongConnectedComponents) makeAdjListSubgraph(node int) {
 	}
 }
 
-// getLowestIdComponent :
 /**
  * Calculates the strong connected component out of a set of scc's, that
  * contains the node with the lowest index.
@@ -179,7 +175,6 @@ func (this *StrongConnectedComponents) getLowestIdComponent() []int {
 	return currScc
 }
 
-// getAdjList
 /**
  * @return Vector[]::Integer representing the adjacency-structure of the
  * strong connected component with least vertex in the currently viewed
@@ -209,7 +204,6 @@ func (this *StrongConnectedComponents) getAdjList(nodes []int) [][]int {
 	return lowestIdAdjacencyList
 }
 
-// getStrongConnectedComponents :
 /**
  * Searches for strong connected components reachable from a given node.
  *
@@ -240,7 +234,7 @@ func (this *StrongConnectedComponents) getStrongConnectedComponents(root int) {
 		var scc []int
 		scc = make([]int, 0)
 
-		// do while equivalent
+		// do while loop
 		for ok := true; ok; ok = (this.number[next] > this.number[root]) {
 			next = this.stack[len(this.stack)-1]
 			this.stack = this.stack[:len(this.stack)-1]

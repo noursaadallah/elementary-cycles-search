@@ -1,9 +1,9 @@
 package ElementaryCyclesSearch
 
 /**
- * Searchs all elementary cycles in a given directed graph. The implementation
+ * Searches all elementary cycles in a given directed graph. The implementation
  * is independent from the concrete objects that represent the graphnodes, it
- * just needs an array of the objects representing the nodes the graph
+ * just needs an array of the objects representing the nodes of the graph
  * and an adjacency-matrix of type boolean, representing the edges of the
  * graph. It then calculates based on the adjacency-matrix the elementary
  * cycles and returns a list, which contains lists itself with the objects of the
@@ -45,7 +45,6 @@ type ElementaryCyclesSearch struct {
 	stack []int
 }
 
-// NewElementaryCyclesSearch : Constructor
 /**
  * @param matrix adjacency-matrix of the graph
  * @param graphNodes array of the graphnodes of the graph; this is used to
@@ -59,7 +58,6 @@ func NewElementaryCyclesSearch(matrix [][]bool, graphNodes []int) *ElementaryCyc
 	return ecs
 }
 
-// GetElementaryCycles :
 /**
  * Returns List::List::Object with the Lists of nodes of all elementary
  * cycles in the graph.
@@ -99,7 +97,6 @@ func (this *ElementaryCyclesSearch) GetElementaryCycles() [][]int {
 	return this.cycles
 }
 
-// findCycles :
 /**
  * Calculates the cycles containing a given node in a strongly connected
  * component. The method calls itself recursivly.
@@ -151,7 +148,7 @@ func (this *ElementaryCyclesSearch) findCycles(v int, s int, adjList [][]int) bo
 	return f
 }
 
-// remove : remove an element from a slice
+// remove : remove an the element r (not the index) from a slice
 func remove(s []int, r int) []int {
 	for i, v := range s {
 		if v == r {
@@ -171,9 +168,8 @@ func contains(s []int, e int) bool {
 	return false
 }
 
-// unblock :
 /**
- * Unblocks recursivly all blocked nodes, starting with a given node.
+ * Unblocks recursively all blocked nodes, starting with a given node.
  *
  * @param node node to unblock
  */
