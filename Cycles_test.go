@@ -138,3 +138,44 @@ func TestCycles3(t *testing.T) {
 	}
 
 }
+
+func TestCycles4(t *testing.T) {
+
+	// init 2D array
+	adjMatrix := make([][]bool, 10)
+	for i := 0; i < 10; i++ {
+		adjMatrix[i] = make([]bool, 10)
+	}
+
+	// init nodes
+	nodes := make([]int, 10) //nodes := make([]string, 10)
+	for i := 0; i < 10; i++ {
+		//nodes[i] = "Node " + strconv.Itoa(i)
+		nodes[i] = i
+	}
+
+	adjMatrix[0][1] = true
+	adjMatrix[1][0] = true
+
+	// search for cycles using the adjMatrix and the list of nodes
+	var ecs *ElementaryCyclesSearch
+	ecs = NewElementaryCyclesSearch(adjMatrix, nodes)
+	cycles := ecs.GetElementaryCycles()
+
+	if cycles == nil {
+		t.Log("result shouldn't be nil")
+		t.Fail()
+	}
+
+	if len(cycles) != 1 {
+		t.Log("result should contain 4 cycles")
+		t.Fail()
+	}
+
+	result := fmt.Sprint(cycles)
+	if result != "[[0 1]]" {
+		t.Log("incorrect result")
+		t.Fail()
+	}
+
+}
